@@ -1,0 +1,245 @@
+{
+  "schema_version": 1,
+  "source": "Mess Menu for October 2026 PDF (uploads/hearth/cd23b040-4214-423c-a1f4-20e1c43c7c9a)",
+  "valid_from": "2026-10-01",
+  "valid_to": "2026-10-31",
+  "repeats": "weekly",
+  "meal_times": {
+    "assumed": false,
+    "breakfast": {
+      "start": "08:00",
+      "end": "10:00"
+    },
+    "lunch": {
+      "start": "13:00",
+      "end": "14:30"
+    },
+    "snacks": {
+      "start": "17:00",
+      "end": "18:00"
+    },
+    "dinner": {
+      "start": "20:00",
+      "end": "21:30"
+    }
+  },
+  "always_included": {
+    "breakfast": [
+      "Cornflakes",
+      "Bread/Toast",
+      "Butter/Jam",
+      "Milk",
+      "Tea",
+      "Coffee"
+    ],
+    "lunch": [],
+    "snacks": [
+      "Tea",
+      "Coffee"
+    ],
+    "dinner": [
+      "Roasted Papad",
+      "Salad"
+    ]
+  },
+  "days": {
+    "mon": {
+      "breakfast": [
+        "Poha",
+        "Sev / Namkeen",
+        "Boiled Eggs",
+        "Masala Kala Chana Sprout"
+      ],
+      "lunch": [
+        "Rajma",
+        "Aloo Jeera",
+        "Jeera Rice",
+        "Roti",
+        "Dahi Bhalla"
+      ],
+      "snacks": [
+        "Honey Chilli Potato",
+        "Fresh Lime Juice"
+      ],
+      "dinner": [
+        "Chicken Curry",
+        "Paneer Butter Masala",
+        "Langarwali Dal",
+        "Roti",
+        "Onion Rice",
+        "Ice Cream"
+      ]
+    },
+    "tue": {
+      "breakfast": [
+        "Aloo Pyaaz Paratha",
+        "Curd",
+        "Green Chutney",
+        "French Toast"
+      ],
+      "lunch": [
+        "Matar Kulche",
+        "Crispy Corn",
+        "Plain Rice",
+        "Pudina Chaach"
+      ],
+      "snacks": [
+        "Sabudana Wada",
+        "Curd",
+        "Fruits"
+      ],
+      "dinner": [
+        "Soya Chunks Masala Dry",
+        "Black Masoor Dal",
+        "Roti",
+        "Veg Pulao",
+        "Kheer"
+      ]
+    },
+    "wed": {
+      "breakfast": [
+        "Moong Dal Chilla",
+        "Peanut Garlic Chutney",
+        "Curd",
+        "Boiled Eggs",
+        "Fruits"
+      ],
+      "lunch": [
+        "Aloo Beans",
+        "Dal Makhani",
+        "Roti",
+        "Jeera Rice",
+        "Lassi"
+      ],
+      "snacks": [
+        "Macaroni",
+        "Glucon-D"
+      ],
+      "dinner": [
+        "Butter Chicken / Mutton Roganjosh",
+        "Shahi Paneer",
+        "Matar Rice",
+        "Roti",
+        "Arhar Dal",
+        "Veg Raita",
+        "Moong Dal Halwa"
+      ]
+    },
+    "thu": {
+      "breakfast": [
+        "Idli / Vada",
+        "Sambhar",
+        "Coconut Chutney",
+        "Omelette",
+        "Fruits"
+      ],
+      "lunch": [
+        "Chana Dal",
+        "Veg Korma",
+        "Garlic Paratha",
+        "Onion Rice",
+        "Boondi Raita"
+      ],
+      "snacks": [
+        "Samosa",
+        "Green Chutney",
+        "Sweet Chutney",
+        "Curd",
+        "Nimbu Paani"
+      ],
+      "dinner": [
+        "Kashmiri Dum Aloo",
+        "Lasuni Dal",
+        "Roti",
+        "Plain Rice",
+        "Ice Cream"
+      ]
+    },
+    "fri": {
+      "breakfast": [
+        "Bedmi Poori",
+        "Rasedar Aloo",
+        "French Toast",
+        "Fruits"
+      ],
+      "lunch": [
+        "Matar Paneer",
+        "Dal Tadka",
+        "Roti",
+        "Lemon Rice",
+        "Pineapple Lassi"
+      ],
+      "snacks": [
+        "Dahi Papdi Chaat",
+        "Jal Jeera"
+      ],
+      "dinner": [
+        "Chicken Biryani",
+        "Veg Biryani",
+        "Saalan",
+        "Roti",
+        "Pyaaz Raita",
+        "Gulab Jamun"
+      ]
+    },
+    "sat": {
+      "breakfast": [
+        "Aloo Sandwich",
+        "Green Chutney",
+        "Scrambled Eggs"
+      ],
+      "lunch": [
+        "Chole Bhature",
+        "French Fries",
+        "Boondi Raita",
+        "Fruits"
+      ],
+      "snacks": [
+        "Lobia Chaat",
+        "Nimbu Paani"
+      ],
+      "dinner": [
+        "Veg Manchurian",
+        "Tadke Wali Dal",
+        "Fried Rice / Noodles",
+        "Roti",
+        "Ice Cream"
+      ]
+    },
+    "sun": {
+      "breakfast": [
+        "Masala Dosa",
+        "Sambhar",
+        "Aloo Masala",
+        "Coconut Chutney"
+      ],
+      "lunch": [
+        "Veg Kolhapuri",
+        "Dal Fry",
+        "Roti",
+        "Plain Rice",
+        "Fruits",
+        "Masala Chaach"
+      ],
+      "snacks": [
+        "Dal Kachori",
+        "Green Chutney",
+        "Sweet Chutney",
+        "Curd",
+        "Tang"
+      ],
+      "dinner": [
+        "Egg Curry",
+        "Malai Kofta",
+        "Panchrangi Dal",
+        "Matar Rice",
+        "Roti",
+        "Custard"
+      ]
+    }
+  },
+  "notes": [
+    "Obvious spelling fixes applied (Omlette, Gulan Jamun, Kohlapuri). Item order kept as printed.",
+    "Meal times confirmed by Kabilan on 2026-10-12."
+  ]
+}

@@ -1,0 +1,224 @@
+{
+  "schema_version": 1,
+  "source": "MDI Gurgaon PGDM 2026-28 Term II timetable PDF (uploads/hearth/35c43825-d041-4639-a1ab-0f379af39936)",
+  "term": "II",
+  "section": "D",
+  "location": {
+    "building": "Gurukula",
+    "room": "G-6"
+  },
+  "slots": [
+    {
+      "id": "I",
+      "start": "08:30",
+      "end": "10:00"
+    },
+    {
+      "id": "II",
+      "start": "10:15",
+      "end": "11:45"
+    },
+    {
+      "id": "III",
+      "start": "12:00",
+      "end": "13:30"
+    },
+    {
+      "id": "IV",
+      "start": "14:15",
+      "end": "15:45"
+    },
+    {
+      "id": "V",
+      "start": "16:00",
+      "end": "17:30"
+    }
+  ],
+  "courses": [
+    {
+      "code": "MEP",
+      "name": "Macroeconomic Environment and Policy",
+      "credits": 3,
+      "length": "full",
+      "total_sessions": 20,
+      "faculty": [
+        {
+          "abbr": "RK",
+          "name": "Rahul Kumar",
+          "applies": "pre_midterm"
+        },
+        {
+          "abbr": "RP",
+          "name": "Rohit Prasad",
+          "applies": "post_midterm"
+        }
+      ]
+    },
+    {
+      "code": "MAC",
+      "name": "Management Accounting and Control",
+      "credits": 3,
+      "length": "full",
+      "total_sessions": 20,
+      "faculty": [
+        {
+          "abbr": "AD",
+          "name": "Ashutosh Dash",
+          "applies": "all"
+        }
+      ]
+    },
+    {
+      "code": "MSM",
+      "name": "Management Science Models",
+      "credits": 3,
+      "length": "full",
+      "total_sessions": 20,
+      "faculty": [
+        {
+          "abbr": "JM",
+          "name": "Joydip Mitra",
+          "applies": "all"
+        }
+      ]
+    },
+    {
+      "code": "MPI",
+      "name": "Marketing Practices and Implementation",
+      "credits": 3,
+      "length": "full",
+      "total_sessions": 20,
+      "faculty": [
+        {
+          "abbr": "KKG",
+          "name": "Kishore Kumar Gangwani",
+          "applies": "all"
+        }
+      ]
+    },
+    {
+      "code": "OM",
+      "name": "Operations Management",
+      "credits": 3,
+      "length": "full",
+      "total_sessions": 20,
+      "faculty": [
+        {
+          "abbr": "RKS",
+          "name": "Rajesh K Singh",
+          "applies": "all"
+        }
+      ]
+    },
+    {
+      "code": "ODC",
+      "name": "Organization Design & Change",
+      "credits": 3,
+      "length": "full",
+      "total_sessions": 20,
+      "faculty": [
+        {
+          "abbr": "AKJ",
+          "name": "Ajay K. Jain",
+          "applies": "all"
+        }
+      ]
+    },
+    {
+      "code": "WEC",
+      "name": "Written Executive Communication",
+      "credits": 1.5,
+      "length": "half",
+      "total_sessions": 10,
+      "runs": "pre_midterm",
+      "faculty": [
+        {
+          "abbr": "SM",
+          "name": "Shoma Mukherji",
+          "applies": "all"
+        }
+      ]
+    }
+  ],
+  "weekly": [
+    {
+      "day": "mon",
+      "slot": "III",
+      "course": "OM"
+    },
+    {
+      "day": "mon",
+      "slot": "V",
+      "course": "MEP"
+    },
+    {
+      "day": "tue",
+      "slot": "II",
+      "course": "ODC"
+    },
+    {
+      "day": "tue",
+      "slot": "III",
+      "course": "WEC"
+    },
+    {
+      "day": "tue",
+      "slot": "V",
+      "course": "MAC"
+    },
+    {
+      "day": "wed",
+      "slot": "II",
+      "course": "MPI"
+    },
+    {
+      "day": "wed",
+      "slot": "III",
+      "course": "OM"
+    },
+    {
+      "day": "wed",
+      "slot": "IV",
+      "course": "MSM"
+    },
+    {
+      "day": "wed",
+      "slot": "V",
+      "course": "MEP"
+    },
+    {
+      "day": "thu",
+      "slot": "II",
+      "course": "ODC"
+    },
+    {
+      "day": "thu",
+      "slot": "III",
+      "course": "WEC"
+    },
+    {
+      "day": "fri",
+      "slot": "II",
+      "course": "MPI"
+    },
+    {
+      "day": "fri",
+      "slot": "III",
+      "course": "MAC"
+    },
+    {
+      "day": "fri",
+      "slot": "IV",
+      "course": "MSM"
+    }
+  ],
+  "notes": [
+    "Full vs half term inferred from credits: 3 credits = full term (20 sessions), 1.5 credits marked Pre-MT = half term (10 sessions).",
+    "Slot I on Mon/Wed/Fri is 'Office Hours' with no section; not treated as a class.",
+    "ODC faculty is 'AKJ' in the grid but '(AJ)' in the course list; same person (Ajay K. Jain).",
+    "No Section D classes on Saturday.",
+    "Recurring slots alone give MAC 19 sessions and WEC 9 pre-midterm; the fixed totals above assume makeup or extra classes fill the gap.",
+    "Every class, extra class and guest lecture lasts 1.5 hours (confirmed by Kabilan on 2026-10-12)."
+  ],
+  "session_length_minutes": 90
+}

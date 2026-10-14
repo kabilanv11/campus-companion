@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "source": "Academic Calendar 2026-27 PGDM batch 2026-28 PDF (uploads/hearth/fee363bc-c9fa-48c9-9802-d11d63ef6ddf), cross-checked with timetable footer",
+  "terms": [
+    {
+      "id": "II",
+      "start": "2026-09-28",
+      "end": "2026-12-24",
+      "last_class_day": "2026-12-19",
+      "midterm_exams": { "from": "2026-11-02", "to": "2026-11-06" },
+      "classes_resume": "2026-11-12",
+      "endterm_exams": { "from": "2026-12-20", "to": "2026-12-24" },
+      "no_class_days": [
+        { "from": "2026-10-02", "to": "2026-10-02", "label": "Gandhi Jayanti" },
+        { "from": "2026-10-20", "to": "2026-10-20", "label": "Dussehra" },
+        { "from": "2026-10-31", "to": "2026-10-31", "label": "Urban Illumina" },
+        { "from": "2026-11-02", "to": "2026-11-06", "label": "Mid-term exams" },
+        { "from": "2026-11-07", "to": "2026-11-11", "label": "Deepawali break" },
+        { "from": "2026-11-28", "to": "2026-11-28", "label": "National Alumni Meet" },
+        { "from": "2026-12-05", "to": "2026-12-06", "label": "Delphique convention" },
+        { "from": "2026-12-20", "to": "2026-12-24", "label": "End-term exams" }
+      ],
+      "events": [
+        { "date": "2026-10-26", "label": "Term I results announced" }
+      ]
+    },
+    {
+      "id": "III",
+      "start": "2027-01-04",
+      "end": "2027-03-30",
+      "midterm_exams": { "from": "2027-02-08", "to": "2027-02-13" },
+      "classes_resume": "2027-02-15",
+      "endterm_exams": { "from": "2027-03-24", "to": "2027-03-30" },
+      "no_class_days": [
+        { "from": "2027-01-17", "to": "2027-01-17", "label": "TEDx" },
+        { "from": "2027-01-26", "to": "2027-01-26", "label": "Republic Day" },
+        { "from": "2027-01-29", "to": "2027-01-31", "label": "Imperium" },
+        { "from": "2027-02-08", "to": "2027-02-13", "label": "Mid-term exams" },
+        { "from": "2027-03-22", "to": "2027-03-22", "label": "Holi" },
+        { "from": "2027-03-24", "to": "2027-03-30", "label": "End-term exams" }
+      ],
+      "events": [
+        { "date": "2027-01-27", "label": "Term II results announced" }
+      ]
+    }
+  ],
+  "breaks": [
+    { "from": "2026-12-25", "to": "2027-01-03", "label": "Winter break" }
+  ],
+  "notes": [
+    "Calendar prints 'Monday December 20, 2026' but Dec 20, 2026 is a Sunday. Dates kept, weekday ignored.",
+    "Half-term (Pre-MT) courses end at the Term II mid-term (classes up to 2026-10-31).",
+    "Faculty-only dates (marks submission, result meetings) left out."
+  ]
+}
