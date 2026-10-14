@@ -16,6 +16,13 @@ function checkRange(errors: string[], v: unknown, where: string) {
   check(errors, isObj(v) && DATE.test(String(v.from)) && DATE.test(String(v.to)) && String(v.from) <= String(v.to), `${where}: bad date range`)
 }
 
+const DATE_OR_MONTH = /^\d{4}-\d{2}(-\d{2})?$/
+
+function checkEvent(errors: string[], v: unknown, where: string) {
+  const ok = isObj(v) && typeof v.label === 'string' && DATE_OR_MONTH.test(String(v.date)) && (v.to === undefined || (DATE.test(String(v.to)) && String(v.to) >= String(v.date)))
+  check(errors, ok, `${where}: bad event ${JSON.stringify(v)}`)
+}
+
 export function validateTimetable(t: unknown): string[] {
   const e: string[] = []
   if (!isObj(t)) return ['not an object']
@@ -80,7 +87,9 @@ export function validateCalendar(c: unknown): string[] {
     check(e, DATE.test(String(t.classes_resume)), `term ${id}: classes_resume`)
     for (const n of Array.isArray(t.no_class_days) ? t.no_class_days : []) checkRange(e, n, `term ${id} no_class_days`)
     check(e, Array.isArray(t.events), `term ${id}: events missing`)
+    for (const ev of Array.isArray(t.events) ? t.events : []) checkEvent(e, ev, `term ${id} events`)
   }
+  for (const ev of Array.isArray(c.after_terms) ? c.after_terms : []) checkEvent(e, ev, 'after_terms')
   for (const b of Array.isArray(c.breaks) ? c.breaks : []) checkRange(e, b, 'breaks')
   return e
 }

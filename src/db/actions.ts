@@ -1,7 +1,7 @@
 import type { Draft } from '@/domain/parse'
 import { fromMinutes, toMinutes } from '@/domain/time'
 import type { Session } from '@/domain/sessions'
-import { db, type SessionStatus, type StoredSession } from './schema'
+import { db, type CampusDB, type SessionStatus, type StoredSession } from './schema'
 
 export type Undo = () => Promise<void>
 
@@ -87,4 +87,30 @@ export async function deleteTask(id: string): Promise<Undo> {
   return async () => {
     if (before) await db.tasks.put(before)
   }
+}
+
+/**
+ * Sets a course's professor or room from `date` on. Only the changed field is stored, so a later
+ * timetable change to the other field still applies. Edits on the same day update that day's row.
+ */
+export async function setCourseField(course: string, field: 'professor' | 'room', value: string, date: string, database: CampusDB = db): Promise<void> {
+  const v = value.trim()
+  if (!v) return
+  await database.transaction('rw', database.courseOverrides, async () => {
+    const same = await database.courseOverrides.where({ course }).filter((o) => o.effectiveFrom === date).first()
+    if (same) await database.courseOverrides.update(same.id, { [field]: v })
+    else await database.courseOverrides.add({ id: crypto.randomUUID(), course, effectiveFrom: date, [field]: v })
+  })
+}
+
+/** Adds a club; its code is the name without spaces or symbols, made unique. Returns the code, or null for an empty name. */
+export async function addClub(name: string, database: CampusDB = db): Promise<string | null> {
+  const n = name.trim()
+  if (!n) return null
+  const base = n.replace(/[^A-Za-z0-9]/g, '') || 'Club'
+  const taken = new Set((await database.clubs.toArray()).map((c) => c.code.toLowerCase()))
+  let code = base
+  for (let i = 2; taken.has(code.toLowerCase()); i++) code = `${base}${i}`
+  await database.clubs.add({ code, name: n })
+  return code
 }

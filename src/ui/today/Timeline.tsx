@@ -197,7 +197,7 @@ export function MealRow({ meal, open, past, className }: { meal: Meal; open: boo
   )
 }
 
-function Dishes({ meal }: { meal: Meal }) {
+export function Dishes({ meal }: { meal: Meal }) {
   if (!meal.items) return <p className="mt-1 text-meta text-ink-2">Menu for {monthLong(meal.date)} not added yet</p>
   return (
     <ul className="mt-1">

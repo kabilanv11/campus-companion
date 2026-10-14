@@ -34,3 +34,15 @@ export function dueLabel(task: { due?: string; dueTime?: string }, today: string
   if (task.due === today) return task.dueTime ? shortTime(task.dueTime) : 'Today'
   return `${dayLabel(task.due, today)}${task.dueTime ? `, ${clockLabel(task.dueTime)}` : ''}`
 }
+
+/**
+ * A calendar entry's dates: "Mon 29", "Sat 1 – Wed 5", "Fri 25 – Sun 3 Jan", or "Feb" when only the month is known.
+ * With `month`, the month follows the last date: "Mon 2 – Fri 6 Nov".
+ */
+export function rangeLabel(from: string, to?: string, month = false): string {
+  if (from.length === 7) return monthShort(`${from}-01`)
+  const one = (d: string) => `${dayShort(d)} ${dayNum(d)}`
+  const crosses = !!to && to.slice(0, 7) !== from.slice(0, 7)
+  if (!to || to === from) return month ? `${one(from)} ${monthShort(from)}` : one(from)
+  return `${one(from)} – ${one(to)}${crosses || month ? ` ${monthShort(to)}` : ''}`
+}

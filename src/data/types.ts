@@ -48,6 +48,13 @@ export interface DateRange {
   to: string
 }
 
+/** A dated line on the calendar. `date` is 'YYYY-MM-DD', or 'YYYY-MM' when only the month is known. */
+export interface CalendarEvent {
+  date: string
+  to?: string
+  label: string
+}
+
 export interface Term {
   id: string
   start: string
@@ -57,11 +64,13 @@ export interface Term {
   classes_resume: string
   endterm_exams: DateRange
   no_class_days: (DateRange & { label: string })[]
-  events: { date: string; label: string }[]
+  events: CalendarEvent[]
 }
 
 export interface AcademicCalendar {
   schema_version: 1
   terms: Term[]
   breaks: (DateRange & { label: string })[]
+  /** Results and the next year's start, listed after the last term. */
+  after_terms?: CalendarEvent[]
 }

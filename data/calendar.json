@@ -3,6 +3,22 @@
   "source": "Academic Calendar 2026-27 PGDM batch 2026-28 PDF (uploads/hearth/fee363bc-c9fa-48c9-9802-d11d63ef6ddf), cross-checked with timetable footer",
   "terms": [
     {
+      "id": "I",
+      "start": "2026-06-29",
+      "end": "2026-09-26",
+      "midterm_exams": { "from": "2026-08-01", "to": "2026-08-05" },
+      "classes_resume": "2026-08-06",
+      "endterm_exams": { "from": "2026-09-21", "to": "2026-09-26" },
+      "no_class_days": [
+        { "from": "2026-08-01", "to": "2026-08-05", "label": "Mid-term exams" },
+        { "from": "2026-08-15", "to": "2026-08-15", "label": "Independence Day" },
+        { "from": "2026-09-21", "to": "2026-09-26", "label": "End-term exams" }
+      ],
+      "events": [
+        { "date": "2026-09-07", "to": "2026-09-18", "label": "Academic workshop" }
+      ]
+    },
+    {
       "id": "II",
       "start": "2026-09-28",
       "end": "2026-12-24",
@@ -21,7 +37,7 @@
         { "from": "2026-12-20", "to": "2026-12-24", "label": "End-term exams" }
       ],
       "events": [
-        { "date": "2026-10-26", "label": "Term I results announced" }
+        { "date": "2026-10-26", "label": "Term I results" }
       ]
     },
     {
@@ -40,16 +56,23 @@
         { "from": "2027-03-24", "to": "2027-03-30", "label": "End-term exams" }
       ],
       "events": [
-        { "date": "2027-01-27", "label": "Term II results announced" }
+        { "date": "2027-01-27", "label": "Term II results" },
+        { "date": "2027-02", "label": "Electives announced" },
+        { "date": "2027-03", "label": "Elective presentations" }
       ]
     }
   ],
   "breaks": [
     { "from": "2026-12-25", "to": "2027-01-03", "label": "Winter break" }
   ],
+  "after_terms": [
+    { "date": "2027-05-05", "label": "Term III results" },
+    { "date": "2027-06", "label": "Term IV begins (tentative)" }
+  ],
   "notes": [
     "Calendar prints 'Monday December 20, 2026' but Dec 20, 2026 is a Sunday. Dates kept, weekday ignored.",
     "Half-term (Pre-MT) courses end at the Term II mid-term (classes up to 2026-10-31).",
-    "Faculty-only dates (marks submission, result meetings) left out."
+    "Faculty-only dates (marks submission, result meetings) left out.",
+    "Term I is kept for the calendar screen only; it has no timetable file. Dates 'YYYY-MM' mean only the month is known."
   ]
 }
