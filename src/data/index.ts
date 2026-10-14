@@ -34,3 +34,12 @@ export function timetableFor(date: string, data: ReferenceData = referenceData):
 export function menuFor(date: string, data: ReferenceData = referenceData): Menu | undefined {
   return data.menus.find((m) => date >= m.valid_from && date <= m.valid_to)
 }
+
+/** Course details by code, from whichever term's timetable lists it (the latest term wins). */
+export function courseInfo(code: string, data: ReferenceData = referenceData) {
+  for (let i = data.timetables.length - 1; i >= 0; i--) {
+    const c = data.timetables[i]!.courses.find((x) => x.code === code)
+    if (c) return c
+  }
+  return undefined
+}

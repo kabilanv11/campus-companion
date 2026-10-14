@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils'
 import type { ReactNode } from 'react'
 
 /** A main screen: 18px gutters, room under the content for the tab bar and + button. */
@@ -9,8 +10,8 @@ export function PageTitle({ children }: { children: ReactNode }) {
   return <h1 className="mt-6 text-greeting font-bold">{children}</h1>
 }
 
-export function SectionLabel({ children }: { children: ReactNode }) {
-  return <h2 className="mt-6 mb-2 text-label font-semibold text-ink-3">{children}</h2>
+export function SectionLabel({ children, className }: { children: ReactNode; className?: string }) {
+  return <h2 className={cn('mb-1 text-label font-semibold text-ink-3', className)}>{children}</h2>
 }
 
 /** "‹ More" on pushed screens. */

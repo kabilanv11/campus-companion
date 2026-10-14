@@ -39,6 +39,8 @@
   --needs-bg: #ffffff;
   --needs-ring: #dbe3e2;
   --scrim: rgba(24, 32, 31, 0.4);
+  --veg: #2e8b57;
+  --nonveg: #9a4a1c;
   --lift: 0 0 0 1px rgba(12, 66, 67, 0.05), 0 14px 22px -10px rgba(12, 66, 67, 0.22);
   --inv-lift: 0 14px 26px -10px rgba(12, 66, 67, 0.55);
   --fab-shadow: 0 8px 18px -6px rgba(12, 66, 67, 0.5);
@@ -74,6 +76,8 @@
   --needs-bg: #15131b;
   --needs-ring: #2a2731;
   --scrim: rgba(0, 0, 0, 0.6);
+  --veg: #4cc27a;
+  --nonveg: #e0814a;
   --lift: 0 0 0 1px rgba(255, 255, 255, 0.06), 0 14px 26px -10px rgba(0, 0, 0, 0.75);
   --inv-lift: 0 14px 28px -10px rgba(0, 0, 0, 0.8), 0 0 24px -6px rgba(127, 212, 208, 0.16);
   --fab-shadow: 0 8px 20px -6px rgba(127, 212, 208, 0.4);
@@ -107,6 +111,8 @@
   --color-needs: var(--needs-bg);
   --color-needs-ring: var(--needs-ring);
   --color-scrim: var(--scrim);
+  --color-veg: var(--veg);
+  --color-nonveg: var(--nonveg);
 
   --color-om: var(--OM);
   --color-mep: var(--MEP);
@@ -204,3 +210,46 @@
 }
 .cc-rise[data-state='open'] { animation: cc-rise 220ms cubic-bezier(0.2, 0.8, 0.2, 1); }
 .cc-fade[data-state='open'] { animation: cc-fade 200ms ease-out; }
+
+/* The "right now" island: everything inside re-maps to island ink (design.md Right-now Island). */
+.cc-island {
+  --ink: var(--inv-ink);
+  --ink-2: var(--inv-ink2);
+  --ink-3: var(--inv-ink3);
+  --line: var(--inv-line);
+  --urg: var(--inv-urg);
+  --sand: var(--inv-pill);
+  --link: var(--inv-ink);
+  background: var(--inv);
+  color: var(--inv-ink);
+  box-shadow: var(--inv-lift);
+}
+
+/* The next-meal card. Dishes stay in Ink in dark mode; the meal name takes the meal ink. */
+.cc-meal {
+  background: var(--meal-bg);
+  box-shadow: var(--lift);
+  --line: color-mix(in srgb, var(--meal-ink) 22%, transparent);
+  --canvas: var(--meal-bg);
+}
+:root:not(.dark) .cc-meal { color: var(--meal-ink); }
+
+/* Bowl glyph for meals. */
+.cc-bowl {
+  position: relative;
+  display: inline-block;
+  width: 14px;
+  height: 9px;
+  border: 1.5px solid currentColor;
+  border-top: 0;
+  border-radius: 0 0 8px 8px;
+}
+.cc-bowl::before {
+  content: '';
+  position: absolute;
+  left: -3px;
+  right: -3px;
+  top: -1.5px;
+  height: 1.5px;
+  background: currentColor;
+}
