@@ -55,3 +55,26 @@ test('an extra class without a course asks for one', async ({ page }) => {
   await page.getByRole('dialog').getByRole('button', { name: 'Add' }).click()
   await expect(page.getByRole('dialog')).toBeHidden()
 })
+
+test('a cancelled class from + shows as cancelled, with Undo', async ({ page }) => {
+  await page.goto('/?now=2026-10-14T08:00')
+  await page.getByRole('button', { name: 'Add' }).click()
+  await page.getByLabel('What to add').fill('mpi class cancelled')
+  const sheet = page.getByRole('dialog')
+  await expect(sheet.getByRole('radio', { name: 'Cancelled' })).toHaveAttribute('aria-checked', 'true')
+  await expect(sheet).toContainText('Wed 14 Oct, 10:15')
+  await expect(sheet).toContainText('Won’t count toward MPI')
+  await sheet.getByRole('button', { name: 'Add' }).click()
+  await expect(page.getByTestId('class-MPI')).toContainText('Cancelled')
+  await page.getByRole('button', { name: 'Undo' }).click()
+  await expect(page.getByTestId('class-MPI')).not.toContainText('Cancelled')
+})
+
+test('a guest lecture later in the week shows under Coming up', async ({ page }) => {
+  await page.goto('/?now=2026-10-14T08:00')
+  await page.getByRole('button', { name: 'Add' }).click()
+  await page.getByLabel('What to add').fill('guest lecture mep fri 4pm auditorium')
+  await page.getByRole('dialog').getByRole('button', { name: 'Add' }).click()
+  await expect(page.getByTestId('coming-guest')).toContainText('MEP guest lecture')
+  await expect(page.getByTestId('coming-guest')).toContainText('Auditorium')
+})

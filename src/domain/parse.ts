@@ -6,7 +6,8 @@ import type { TaskType } from '@/db/schema'
 import { addDays, fromMinutes, istDate, istMinutes, toMinutes, weekStart, weekday } from './time'
 
 export type EventType = 'extra' | 'guest' | 'club'
-export type DraftType = TaskType | EventType
+/** 'cancel' marks an existing class as cancelled instead of adding anything. */
+export type DraftType = TaskType | EventType | 'cancel'
 
 export const TYPE_LABEL: Record<DraftType, string> = {
   assignment: 'Assignment',
@@ -16,9 +17,10 @@ export const TYPE_LABEL: Record<DraftType, string> = {
   extra: 'Extra class',
   guest: 'Guest lecture',
   club: 'Club event',
+  cancel: 'Cancelled',
   other: 'Other',
 }
-export const TYPE_ORDER: DraftType[] = ['assignment', 'quiz', 'reading', 'exam', 'extra', 'guest', 'club', 'other']
+export const TYPE_ORDER: DraftType[] = ['assignment', 'quiz', 'reading', 'exam', 'extra', 'guest', 'club', 'cancel', 'other']
 export const isEventType = (t: DraftType): t is EventType => t === 'extra' || t === 'guest' || t === 'club'
 
 export interface Draft {
@@ -119,6 +121,8 @@ const KEYWORDS: [DraftType, string[]][] = [
   ['extra', ['extra class', 'extra session', 'comp class', 'rescheduled class', 'make up', 'makeup', 'make-up', 'compensatory']],
   ['guest', ['guest lecture', 'guest session', 'guest talk', 'guest', 'gl']],
 ]
+// A cancellation wins over any other keyword: "mep guest lecture cancelled" cancels that lecture.
+const CANCEL_WORDS = ['no class', 'called off', 'cancelled', 'canceled', 'cancel', 'cancellation']
 const DELIVERABLE = new Set(['writeup', 'write-up', 'analysis', 'report', 'memo', 'deck'])
 const MIDTERM = new Set(['mid term', 'midterm', 'mid-term', 'mt'])
 const ENDTERM = new Set(['end term', 'endterm', 'end-term', 'et', 'final'])
@@ -142,6 +146,10 @@ function findType(toks: Token[]): TypeHit | undefined {
       // Earliest keyword wins; at the same token, the longer phrase.
       if (!best || i < best.index || (i === best.index && n > best.length)) best = { type, index: i, length: n, keyword: kw }
     }
+  }
+  for (const kw of CANCEL_WORDS) {
+    const i = findPhrase(toks, kw, (tok, w) => tok === w)
+    if (i >= 0) return { type: 'cancel', index: i, length: kw.split(' ').length, keyword: kw }
   }
   if (!best) return undefined
   // "case" with a deliverable word in the line is an assignment, not case prep.
@@ -365,7 +373,7 @@ export function parse(text: string, now: Date, ctx: ParseContext, opts: { type?:
   // 4. Type keyword. Keyword tokens stay in the title.
   const typeHit = findType(toks)
   // Task keywords stay in the title ("Assignment 2"); class keywords don't ("makeup" → "Extra class").
-  if (typeHit) for (let j = 0; j < typeHit.length; j++) toks[typeHit.index + j]!.used = isEventType(typeHit.type) ? 'keyword' : 'type'
+  if (typeHit) for (let j = 0; j < typeHit.length; j++) toks[typeHit.index + j]!.used = isEventType(typeHit.type) || typeHit.type === 'cancel' ? 'keyword' : 'type'
 
   // 3. Course, then 5. club (only when no course).
   const courseHit = findCourse(toks, ctx)
@@ -398,6 +406,11 @@ export function parse(text: string, now: Date, ctx: ParseContext, opts: { type?:
   if (type === 'extra' && typeHit && MAKEUP.has(typeHit.keyword)) draft.makeup = true
 
   // 9. Defaults.
+  if (type === 'cancel') {
+    draft.title = TYPE_LABEL.cancel
+    draft.when = cancelTarget(course, dt, today, nowMin, ctx)
+    return draft
+  }
   if (isEventType(type)) {
     const ahead = (date: string) => date > today || (!!dt?.time && toMinutes(dt.time) > nowMin) || !dt?.time
     let date = dt?.date ?? (dt?.weekday !== undefined ? resolveWeekday(dt, today, ahead) : undefined)
@@ -439,6 +452,22 @@ export function parse(text: string, now: Date, ctx: ParseContext, opts: { type?:
   }
   if (date) draft.due = { date, time: timeFor(date) }
   return draft
+}
+
+/** The class a cancellation points at: the named day (and time, if it matches), else the course's next class still to finish. */
+function cancelTarget(course: string | undefined, dt: DateHit | undefined, today: string, nowMin: number, ctx: ParseContext): Draft['when'] {
+  if (!course) return dt?.date ? { date: dt.date } : undefined
+  const pick = (date: string) => {
+    const starts = ctx.classStarts(course, date)
+    return (dt?.time && starts.find((s) => s === dt.time)) || starts[0]
+  }
+  const date = dt?.date ?? (dt?.weekday !== undefined ? resolveWeekday(dt, today, (d) => ctx.classStarts(course, d).some((s) => toMinutes(s) + 90 > nowMin)) : undefined)
+  if (date) return { date, start: pick(date) }
+  for (let d = today, n = 0; n < 60; n++, d = addDays(d, 1)) {
+    const start = ctx.classStarts(course, d).find((s) => d > today || toMinutes(s) + 90 > nowMin)
+    if (start) return { date: d, start }
+  }
+  return undefined
 }
 
 function clubName(code: string, ctx: ParseContext) {
