@@ -1,3 +1,5 @@
+import type { Draft } from '@/domain/parse'
+import { fromMinutes, toMinutes } from '@/domain/time'
 import type { Session } from '@/domain/sessions'
 import { db, type SessionStatus, type StoredSession } from './schema'
 
@@ -27,6 +29,61 @@ export async function markSessions(sessions: Session[], status: SessionStatus): 
 export async function setTaskDone(id: string, done: boolean): Promise<Undo> {
   const before = await db.tasks.get(id)
   await db.tasks.update(id, { doneAt: done ? new Date().toISOString() : undefined })
+  return async () => {
+    if (before) await db.tasks.put(before)
+  }
+}
+
+
+/** What a draft still needs before it can be added; the sheet opens that field. */
+export function missingField(d: Draft): 'course' | 'when' | null {
+  if ((d.type === 'extra' || d.type === 'guest') && !d.course) return 'course'
+  if ((d.type === 'extra' || d.type === 'guest' || d.type === 'club') && (!d.when?.date || !d.when.start)) return 'when'
+  return null
+}
+
+/** Stores a draft as a task, a session (extra class, guest lecture) or a club event. */
+export async function saveDraft(d: Draft, existingTaskId?: string): Promise<void> {
+  if (d.type === 'extra' || d.type === 'guest') {
+    await db.sessions.put({
+      id: crypto.randomUUID(),
+      date: d.when!.date!,
+      start: d.when!.start!,
+      course: d.course!,
+      kind: d.type === 'guest' ? 'guest' : d.makeup ? 'makeup' : 'extra',
+      venue: d.venue,
+    })
+    return
+  }
+  if (d.type === 'club') {
+    const start = d.when!.start!
+    await db.clubEvents.put({
+      id: crypto.randomUUID(),
+      club: d.club ?? 'Club',
+      title: d.title,
+      date: d.when!.date!,
+      start,
+      end: d.when!.end ?? fromMinutes(toMinutes(start) + 60),
+      venue: d.venue,
+    })
+    return
+  }
+  const existing = existingTaskId ? await db.tasks.get(existingTaskId) : undefined
+  await db.tasks.put({
+    id: existing?.id ?? crypto.randomUUID(),
+    title: d.title,
+    course: d.course,
+    type: d.type,
+    due: d.due?.date,
+    dueTime: d.due?.time,
+    doneAt: existing?.doneAt,
+    createdAt: existing?.createdAt ?? new Date().toISOString(),
+  })
+}
+
+export async function deleteTask(id: string): Promise<Undo> {
+  const before = await db.tasks.get(id)
+  await db.tasks.delete(id)
   return async () => {
     if (before) await db.tasks.put(before)
   }

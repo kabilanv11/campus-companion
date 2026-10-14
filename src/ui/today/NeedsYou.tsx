@@ -1,9 +1,8 @@
 import type { Session } from '@/domain/sessions'
 import type { Task } from '@/db/schema'
 import { isOverdue } from '@/domain/tasks'
-import { shortTime } from '@/domain/time'
 import { Button } from '@/components/ui/button'
-import { clockLabel, dayLabel } from '@/lib/format'
+import { dayLabel, dueLabel } from '@/lib/format'
 import { Checkbox, CourseCode, UrgentPill } from '@/ui/marks'
 
 export function taskTitle(t: Task) {
@@ -30,7 +29,7 @@ export function NeedsYou({
       <h2 className="pb-1 text-label font-semibold text-urgent">Needs you</h2>
       {tasks.map((t, i) => {
         const urgent = isOverdue(t, today) || t.due === today
-        const pill = isOverdue(t, today) ? 'Overdue' : t.due === today ? (t.dueTime ? shortTime(t.dueTime) : 'Today') : `${dayLabel(t.due, today)}${t.dueTime ? `, ${clockLabel(t.dueTime)}` : ''}`
+        const pill = isOverdue(t, today) ? 'Overdue' : dueLabel(t, today)
         return (
           <div key={t.id} className={`flex items-center gap-2.5 py-2.5 ${i > 0 ? 'border-t border-line' : ''}`}>
             <Checkbox urgent={urgent} onChange={() => onTick(t)} label={`Done: ${taskTitle(t)}`} />

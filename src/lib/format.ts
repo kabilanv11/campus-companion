@@ -27,3 +27,10 @@ export function clockLabel(time: string): string {
 }
 
 export const WORD_DAY = { mon: 'Monday', tue: 'Tuesday', wed: 'Wednesday', thu: 'Thursday', fri: 'Friday', sat: 'Saturday', sun: 'Sunday' } as const
+
+/** A task's deadline as rows show it: "2:15" today, "Thu", "Fri, 11 PM", "Mon 2 Nov". */
+export function dueLabel(task: { due?: string; dueTime?: string }, today: string): string {
+  if (!task.due) return 'No date'
+  if (task.due === today) return task.dueTime ? shortTime(task.dueTime) : 'Today'
+  return `${dayLabel(task.due, today)}${task.dueTime ? `, ${clockLabel(task.dueTime)}` : ''}`
+}

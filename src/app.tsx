@@ -10,7 +10,7 @@ import { Toaster } from '@/components/ui/sonner'
 import { TabBar } from '@/ui/TabBar'
 import { Fab } from '@/ui/Fab'
 import { ToastPill } from '@/ui/Toast'
-import { CaptureSheet } from '@/ui/CaptureSheet'
+import { CaptureSheet, type CaptureRequest } from '@/ui/CaptureSheet'
 import { Today } from '@/screens/Today'
 import { Tasks } from '@/screens/Tasks'
 import { Attendance } from '@/screens/Attendance'
@@ -22,9 +22,9 @@ import { Settings } from '@/screens/Settings'
 export function App() {
   const { route, go, back } = useRouter()
   const [captureOpen, setCaptureOpen] = useState(false)
-  const [captureText, setCaptureText] = useState('')
-  const capture = (text = '') => {
-    setCaptureText(text)
+  const [captureRequest, setCaptureRequest] = useState<CaptureRequest>({})
+  const capture = (request: CaptureRequest = {}) => {
+    setCaptureRequest(request)
     setCaptureOpen(true)
   }
   const settings = useLiveQuery(() => db.settings.get('app'))
@@ -63,9 +63,9 @@ export function App() {
       ) : route.screen === 'settings' ? (
         <Settings theme={theme} onTheme={(t) => updateSettings({ theme: t })} onBack={back} />
       ) : route.tab === 'tasks' ? (
-        <Tasks />
+        <Tasks onEdit={(task) => capture({ task })} />
       ) : route.tab === 'attendance' ? (
-        <Attendance onAdd={capture} />
+        <Attendance onAdd={(text) => capture({ text })} />
       ) : route.tab === 'more' ? (
         <More onOpen={open} />
       ) : (
@@ -74,7 +74,7 @@ export function App() {
 
       {showFab && <Fab onClick={() => capture()} />}
       <TabBar active={route.tab} onSelect={(tab) => go({ tab })} />
-      <CaptureSheet open={captureOpen} initialText={captureText} onOpenChange={setCaptureOpen} />
+      <CaptureSheet open={captureOpen} request={captureRequest} onOpenChange={setCaptureOpen} />
       <Toaster />
     </>
   )

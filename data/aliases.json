@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "courses": {
+    "MEP": ["macro", "macroeconomics", "macroeconomic", "macro econ", "eco", "econ"],
+    "MAC": ["accounting", "accounts", "mgmt accounting", "cost accounting"],
+    "MSM": ["mgmt science", "management science", "models"],
+    "MPI": ["marketing", "mktg", "mkt"],
+    "OM": ["ops", "operations"],
+    "ODC": ["org design", "organisation design", "organization design"],
+    "WEC": ["writing", "written comm", "exec comm", "business writing"]
+  },
+  "clubs": {
+    "SAM": ["samaritans", "samaritan", "sams", "sam"],
+    "TEDx": ["tedx", "ted", "tedxmdi"]
+  },
+  "places": {
+    "aud": "Auditorium",
+    "auditorium": "Auditorium",
+    "tagore": "Tagore Hall",
+    "tagore hall": "Tagore Hall",
+    "mdp centre": "MDP Centre",
+    "mdp center": "MDP Centre",
+    "library": "Library",
+    "mess": "Mess",
+    "sac": "SAC",
+    "seminar hall": "Seminar Hall"
+  }
+}

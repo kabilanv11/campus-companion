@@ -42,7 +42,8 @@ export interface Task {
   title: string
   course?: string
   type: TaskType
-  due: string
+  /** Undated tasks sit in Later and never enter Needs you. */
+  due?: string
   dueTime?: string
   doneAt?: string
   createdAt: string
