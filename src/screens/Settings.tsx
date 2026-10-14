@@ -10,6 +10,7 @@ import { useNow } from '@/lib/useNow'
 import { cn } from '@/lib/utils'
 import { ClubSquare, CourseDot } from '@/ui/marks'
 import { BackLink, Page, PageTitle, SectionLabel } from '@/ui/Page'
+import { BackupSection } from '@/ui/BackupSection'
 import { Segmented } from '@/ui/Segmented'
 
 const THEMES: { id: ThemeSetting; label: string }[] = [
@@ -20,7 +21,6 @@ const THEMES: { id: ThemeSetting; label: string }[] = [
 
 const ROW = 'flex items-center justify-between gap-2.5 border-t border-line py-2.5 text-body first-of-type:border-t-0'
 
-// Backup arrives in build step 7.
 export function Settings({ theme, onTheme, onBack }: { theme: ThemeSetting; onTheme: (t: ThemeSetting) => void; onBack: () => void }) {
   const today = istDate(useNow())
   const user = useUserData()
@@ -126,6 +126,12 @@ export function Settings({ theme, onTheme, onBack }: { theme: ThemeSetting; onTh
               + Add club
             </button>
           )}
+        </Section>
+      )}
+
+      {user?.settings && (
+        <Section title="Backup">
+          <BackupSection settings={user.settings} today={today} />
         </Section>
       )}
     </Page>
