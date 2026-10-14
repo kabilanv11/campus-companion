@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { toast } from 'sonner'
 import { db, getSettings, updateSettings } from '@/db/schema'
+import { loadDemoData } from '@/lib/demo'
 import { useRouter, type Pushed } from '@/lib/router'
 import { applyTheme, watchSystemTheme, type ThemeSetting } from '@/lib/theme'
 import { useAppUpdate, usePersistentStorage } from '@/sw-update'
@@ -25,7 +26,7 @@ export function App() {
   const theme: ThemeSetting = settings?.theme ?? 'system'
 
   useEffect(() => {
-    getSettings()
+    getSettings().then(loadDemoData)
   }, [])
 
   // Theme: apply on change and follow the phone while on System.
@@ -63,7 +64,7 @@ export function App() {
       ) : route.tab === 'more' ? (
         <More onOpen={open} />
       ) : (
-        <Today />
+        <Today onSchedule={() => open('schedule')} />
       )}
 
       {showFab && <Fab onClick={() => setCaptureOpen(true)} />}

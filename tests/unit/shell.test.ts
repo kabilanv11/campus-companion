@@ -36,3 +36,12 @@ describe('test clock', () => {
     expect(parseTestNow('')).toBeNull()
   })
 })
+
+describe('cn', () => {
+  it('keeps a colour next to a named text size', async () => {
+    const { cn } = await import('@/lib/utils')
+    expect(cn('text-btn-ink', 'text-caption')).toBe('text-btn-ink text-caption')
+    expect(cn('text-ink', 'text-urgent')).toBe('text-urgent')
+    expect(cn('text-caption', 'text-[13px]')).toBe('text-[13px]')
+  })
+})

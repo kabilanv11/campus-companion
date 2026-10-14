@@ -22,7 +22,7 @@ export function Settings({
     <Page>
       <BackLink label="More" onClick={onBack} />
       <PageTitle>Settings</PageTitle>
-      <SectionLabel>Appearance</SectionLabel>
+      <SectionLabel className="mt-6 mb-2">Appearance</SectionLabel>
       {/* design.md: segments are separate pills with a 6px gap, never a joined bar. */}
       <div role="radiogroup" aria-label="Appearance" className="flex gap-1.5">
         {THEMES.map((t) => (
