@@ -80,9 +80,8 @@ export function buildToday(input: TodayInput): TodayModel {
 
   // Coming up: open tasks not yet in Needs you, due within a week, and the next no-class days.
   const comingUp: ComingUpItem[] = open
-    .filter((t) => !inNeedsYou(t, today) && daysBetween(today, t.due) <= COMING_UP_TASK_DAYS)
-    .sort((a, b) => a.due.localeCompare(b.due) || (a.dueTime ?? '24:00').localeCompare(b.dueTime ?? '24:00'))
-    .map((task) => ({ type: 'task' as const, task, date: task.due }))
+    .flatMap((task) => (task.due && !inNeedsYou(task, today) && daysBetween(today, task.due) <= COMING_UP_TASK_DAYS ? [{ type: 'task' as const, task, date: task.due }] : []))
+    .sort((a, b) => a.date.localeCompare(b.date) || (a.task.dueTime ?? '24:00').localeCompare(b.task.dueTime ?? '24:00'))
   let lastLabel = ''
   for (let d = addDays(shown, 1); daysBetween(today, d) <= COMING_UP_NO_CLASS_DAYS; d = addDays(d, 1)) {
     const r = noClassReason(d, data.calendar)
