@@ -1,10 +1,13 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Sheet, SheetContent, SheetTitle, SheetDescription } from '@/components/ui/sheet'
 import { Button } from '@/components/ui/button'
 
 // design.md Capture Sheet. The parser, parsed rows and type pills arrive in build step 5.
-export function CaptureSheet({ open, onOpenChange }: { open: boolean; onOpenChange: (open: boolean) => void }) {
-  const [text, setText] = useState('')
+export function CaptureSheet({ open, initialText = '', onOpenChange }: { open: boolean; initialText?: string; onOpenChange: (open: boolean) => void }) {
+  const [text, setText] = useState(initialText)
+  useEffect(() => {
+    if (open) setText(initialText)
+  }, [open, initialText])
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>

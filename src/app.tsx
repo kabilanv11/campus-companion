@@ -22,6 +22,11 @@ import { Settings } from '@/screens/Settings'
 export function App() {
   const { route, go, back } = useRouter()
   const [captureOpen, setCaptureOpen] = useState(false)
+  const [captureText, setCaptureText] = useState('')
+  const capture = (text = '') => {
+    setCaptureText(text)
+    setCaptureOpen(true)
+  }
   const settings = useLiveQuery(() => db.settings.get('app'))
   const theme: ThemeSetting = settings?.theme ?? 'system'
 
@@ -60,16 +65,16 @@ export function App() {
       ) : route.tab === 'tasks' ? (
         <Tasks />
       ) : route.tab === 'attendance' ? (
-        <Attendance />
+        <Attendance onAdd={capture} />
       ) : route.tab === 'more' ? (
         <More onOpen={open} />
       ) : (
         <Today onSchedule={() => open('schedule')} />
       )}
 
-      {showFab && <Fab onClick={() => setCaptureOpen(true)} />}
+      {showFab && <Fab onClick={() => capture()} />}
       <TabBar active={route.tab} onSelect={(tab) => go({ tab })} />
-      <CaptureSheet open={captureOpen} onOpenChange={setCaptureOpen} />
+      <CaptureSheet open={captureOpen} initialText={captureText} onOpenChange={setCaptureOpen} />
       <Toaster />
     </>
   )
