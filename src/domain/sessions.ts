@@ -45,6 +45,21 @@ export function overrideFor(course: string, date: string, overrides: CourseOverr
   }
 }
 
+/** A course's professor and room on a date, after overrides, plus the timetable's default room. */
+export function courseOn(code: string, date: string, ctx: SessionContext): { professor: string; room: string; defaultRoom: string } | undefined {
+  const term = termOf(date, ctx.data.calendar)
+  const timetable = (term && ctx.data.timetables.find((t) => t.term === term.id)) ?? ctx.data.timetables.find((t) => t.courses.some((c) => c.code === code))
+  const course = timetable?.courses.find((c) => c.code === code)
+  if (!timetable || !course) return undefined
+  const ov = overrideFor(code, date, ctx.overrides)
+  const defaultRoom = timetable.location.room
+  return {
+    professor: ov.professor ?? professorFor(course, term ? isPostMidterm(date, term) : false),
+    room: ov.room ?? defaultRoom,
+    defaultRoom,
+  }
+}
+
 function courseRunsOn(course: Course, postMidterm: boolean): boolean {
   if (course.length !== 'half') return true
   return (course.runs ?? 'pre_midterm') === 'pre_midterm' ? !postMidterm : postMidterm
