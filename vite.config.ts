@@ -21,7 +21,6 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'prompt',
-      includeAssets: ['fonts/*.woff2', 'icons/apple-touch-icon.png', 'icons/favicon-64.png'],
       manifest: {
         name: 'Campus Companion',
         short_name: 'Campus',

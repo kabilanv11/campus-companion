@@ -27,6 +27,7 @@ export function FoodMarkIcon({ mark }: { mark: FoodMark }) {
   const nonveg = mark === 'nonveg'
   return (
     <span
+      role="img"
       aria-label={nonveg ? 'Non-veg' : 'Veg'}
       className={cn('relative inline-flex size-[14px] shrink-0 items-center justify-center rounded-[3px] border-[1.5px]', nonveg ? 'border-nonveg' : 'border-veg')}
     >

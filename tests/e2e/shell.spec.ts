@@ -39,7 +39,7 @@ test('theme follows the phone and Settings overrides it', async ({ page }, info)
 
 test('no horizontal scroll at 360px', async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 780 })
-  for (const path of ['/', '/tasks', '/attendance', '/more', '/settings']) {
+  for (const path of ['/', '/tasks', '/attendance', '/more', '/schedule', '/calendar', '/settings']) {
     await page.goto(path)
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)
     expect(overflow, path).toBeLessThanOrEqual(0)
