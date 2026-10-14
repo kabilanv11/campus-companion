@@ -8,7 +8,7 @@ import { parse, TYPE_LABEL, TYPE_ORDER, isEventType, type Draft, type DraftType 
 import { parseContext } from '@/domain/parseContext'
 import { sessionsForDate } from '@/domain/sessions'
 import { showsFrom } from '@/domain/tasks'
-import { istDate, shortTime } from '@/domain/time'
+import { addDays, istDate, shortTime } from '@/domain/time'
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from '@/components/ui/sheet'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
@@ -76,8 +76,9 @@ export function CaptureSheet({ open, request, onOpenChange }: { open: boolean; r
       return
     }
     if (!text.trim() && !request.task) return
-    await saveDraft(draft, request.task?.id)
+    const undo = await saveDraft(draft, request.task?.id)
     onOpenChange(false)
+    if (undo && draft.when?.date) undoToast(`${draft.course} cancelled · ${dayLabel(draft.when.date, today)}`, undo)
   }
 
   const remove = async () => {
@@ -88,6 +89,7 @@ export function CaptureSheet({ open, request, onOpenChange }: { open: boolean; r
   }
 
   const event = isEventType(draft.type)
+  const cancel = draft.type === 'cancel'
   // The picker lists courses running now; typing still matches any term's course.
   const term = termFor(today)
   const runningCourses = (timetableFor(today)?.courses ?? []).filter((c) => c.length !== 'half' || !term || today < term.midterm_exams.from)
@@ -142,7 +144,7 @@ export function CaptureSheet({ open, request, onOpenChange }: { open: boolean; r
                 id="course"
                 openField={openField}
                 setOpenField={setOpenField}
-                required={draft.type === 'extra' || draft.type === 'guest'}
+                required={draft.type === 'extra' || draft.type === 'guest' || cancel}
                 value={
                   draft.course ? (
                     <span className="grid gap-1">
@@ -153,13 +155,31 @@ export function CaptureSheet({ open, request, onOpenChange }: { open: boolean; r
                 }
                 options={[
                   ...runningCourses.map((c) => ({ key: c.code, label: `${c.code} · ${c.name}`, onPick: () => lock({ course: c.code }) })),
-                  ...(event ? [] : [{ key: 'none', label: 'No course', onPick: () => lock({ course: undefined }) }]),
+                  ...(event || cancel ? [] : [{ key: 'none', label: 'No course', onPick: () => lock({ course: undefined }) }]),
                 ]}
               />
             </Row>
           )}
 
-          {event ? (
+          {cancel ? (
+            <>
+              <Row label="Class">
+                <Choice
+                  id="when"
+                  openField={openField}
+                  setOpenField={setOpenField}
+                  required
+                  value={draft.when?.date && draft.when.start ? `${fullDate(draft.when.date)}, ${shortTime(draft.when.start)}` : null}
+                  options={upcomingClasses(draft.course, today, user).map((c) => ({
+                    key: `${c.date}_${c.start}`,
+                    label: `${fullDate(c.date)}, ${shortTime(c.start)}`,
+                    onPick: () => lock({ when: { date: c.date, start: c.start } }),
+                  }))}
+                />
+              </Row>
+              {draft.course && <Row label="Attendance">Won’t count toward {draft.course}</Row>}
+            </>
+          ) : event ? (
             <>
               <Row label="When">
                 <DateTimeChoice
@@ -244,6 +264,19 @@ export function CaptureSheet({ open, request, onOpenChange }: { open: boolean; r
       </SheetContent>
     </Sheet>
   )
+}
+
+/** A course's classes from today over the next two weeks, for picking which one is cancelled. */
+function upcomingClasses(course: string | undefined, today: string, user: { sessions: Parameters<typeof sessionsForDate>[1]['stored']; overrides: Parameters<typeof sessionsForDate>[1]['overrides'] }) {
+  if (!course) return []
+  const out: { date: string; start: string }[] = []
+  for (let i = 0; i < 14; i++) {
+    const date = addDays(today, i)
+    for (const s of sessionsForDate(date, { data: referenceData, stored: user.sessions, overrides: user.overrides })) {
+      if (s.course === course && s.status !== 'cancelled') out.push({ date, start: s.start })
+    }
+  }
+  return out
 }
 
 const toMin = (t: string) => Number(t.slice(0, 2)) * 60 + Number(t.slice(3, 5))

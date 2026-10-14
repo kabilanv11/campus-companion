@@ -21,6 +21,7 @@ export interface TodayInput {
 export type ComingUpItem =
   | { type: 'task'; task: Task; date: string }
   | { type: 'noClass'; label: string; date: string }
+  | { type: 'guest'; session: Session; date: string }
 
 export interface TodayModel {
   today: string
@@ -43,6 +44,8 @@ export interface TodayModel {
 const COMING_UP_TASK_DAYS = 7
 const COMING_UP_NO_CLASS_DAYS = 14
 const MONTH_NAME = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+
+const startOf = (i: ComingUpItem) => (i.type === 'task' ? (i.task.dueTime ?? '24:00') : i.type === 'guest' ? i.session.start : '00:00')
 
 export function buildToday(input: TodayInput): TodayModel {
   const { now, data } = input
@@ -92,7 +95,11 @@ export function buildToday(input: TodayInput): TodayModel {
     lastLabel = r.label
     comingUp.push({ type: 'noClass', label: r.label, date: d })
   }
-  comingUp.sort((a, b) => a.date.localeCompare(b.date))
+  // Guest lectures in the coming week, to plan around.
+  for (let d = addDays(shown, 1); daysBetween(today, d) <= COMING_UP_TASK_DAYS; d = addDays(d, 1)) {
+    for (const s of sessionsForDate(d, ctx)) if (s.kind === 'guest' && s.status !== 'cancelled') comingUp.push({ type: 'guest', session: s, date: d })
+  }
+  comingUp.sort((a, b) => a.date.localeCompare(b.date) || startOf(a).localeCompare(startOf(b)))
 
   // Day-read facts for the shown day.
   const reason = noClassReason(shown, data.calendar)

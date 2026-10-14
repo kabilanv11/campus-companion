@@ -87,3 +87,22 @@ describe('quick-add parser: forced type', () => {
     expect(parse('mac fri 4pm', now, ctx, { type: 'extra' })).toMatchObject({ type: 'extra', course: 'MAC', when: { date: '2026-10-16', start: '16:00', end: '17:30' }, venue: 'G-6' })
   })
 })
+
+describe('cancelled classes', () => {
+  it('"mpi class cancelled tomorrow" points at Wednesday\'s MPI', () => {
+    expect(p('mpi class cancelled tomorrow')).toMatchObject({ type: 'cancel', course: 'MPI', when: { date: '2026-10-14', start: '10:15' } })
+  })
+  it('with no day, it is the course\'s next class', () => {
+    const d = p('mpi cancelled')
+    expect(d).toMatchObject({ type: 'cancel', course: 'MPI' })
+    expect(d.when!.date! >= '2026-10-13').toBe(true)
+    expect(ctx.classStarts('MPI', d.when!.date!)).toContain(d.when!.start)
+  })
+  it('a cancellation wins over other keywords', () => {
+    expect(p('mep guest lecture cancelled').type).toBe('cancel')
+    expect(p('no class msm fri')).toMatchObject({ type: 'cancel', course: 'MSM', when: { date: '2026-10-16', start: '14:15' } })
+  })
+  it('without a course it still needs one', () => {
+    expect(p('class cancelled tomorrow')).toMatchObject({ type: 'cancel', course: undefined })
+  })
+})

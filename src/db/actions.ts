@@ -1,8 +1,9 @@
 import type { Draft } from '@/domain/parse'
 import { now } from '@/lib/clock'
 import { fromMinutes, toMinutes } from '@/domain/time'
-import type { Session } from '@/domain/sessions'
-import { db, type CampusDB, type SessionStatus, type StoredSession } from './schema'
+import { referenceData } from '@/data'
+import { sessionsForDate, type Session } from '@/domain/sessions'
+import { db, type CampusDB, type TaskType, type SessionStatus, type StoredSession } from './schema'
 
 export type Undo = () => Promise<void>
 
@@ -38,13 +39,20 @@ export async function setTaskDone(id: string, done: boolean): Promise<Undo> {
 
 /** What a draft still needs before it can be added; the sheet opens that field. */
 export function missingField(d: Draft): 'course' | 'when' | null {
+  if (d.type === 'cancel') return !d.course ? 'course' : !d.when?.date || !d.when.start ? 'when' : null
   if ((d.type === 'extra' || d.type === 'guest') && !d.course) return 'course'
   if ((d.type === 'extra' || d.type === 'guest' || d.type === 'club') && (!d.when?.date || !d.when.start)) return 'when'
   return null
 }
 
-/** Stores a draft as a task, a session (extra class, guest lecture) or a club event. */
-export async function saveDraft(d: Draft, existingTaskId?: string): Promise<void> {
+/** Stores a draft as a task, a session (extra class, guest lecture) or a club event, or cancels a class (returning its undo). */
+export async function saveDraft(d: Draft, existingTaskId?: string): Promise<Undo | void> {
+  if (d.type === 'cancel') {
+    const [stored, overrides] = await Promise.all([db.sessions.toArray(), db.courseOverrides.toArray()])
+    const session = sessionsForDate(d.when!.date!, { data: referenceData, stored, overrides }).find((s) => s.course === d.course && s.start === d.when!.start)
+    if (!session) return
+    return markSessions([session], 'cancelled')
+  }
   if (d.type === 'extra' || d.type === 'guest') {
     await db.sessions.put({
       id: crypto.randomUUID(),
@@ -74,7 +82,7 @@ export async function saveDraft(d: Draft, existingTaskId?: string): Promise<void
     id: existing?.id ?? crypto.randomUUID(),
     title: d.title,
     course: d.course,
-    type: d.type,
+    type: d.type as TaskType,
     due: d.due?.date,
     dueTime: d.due?.time,
     doneAt: existing?.doneAt,
