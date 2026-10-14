@@ -69,7 +69,7 @@ export function App() {
       ) : route.tab === 'more' ? (
         <More onOpen={open} />
       ) : (
-        <Today onSchedule={() => open('schedule')} />
+        <Today onSchedule={() => open('schedule')} onBackup={() => open('settings')} />
       )}
 
       {showFab && <Fab onClick={() => capture()} />}

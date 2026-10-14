@@ -8,6 +8,7 @@ import { buildToday } from '@/domain/today'
 import type { SessionStatus, Task } from '@/db/schema'
 import { Button } from '@/components/ui/button'
 import { WORD_DAY, dayLabel } from '@/lib/format'
+import { backupReminder } from '@/lib/backup'
 import { undoToast } from '@/lib/toast'
 import { useNow } from '@/lib/useNow'
 import { Page, SectionLabel } from '@/ui/Page'
@@ -15,7 +16,7 @@ import { ComingUp } from '@/ui/today/ComingUp'
 import { MealRow, Timeline } from '@/ui/today/Timeline'
 import { NeedsYou, taskTitle } from '@/ui/today/NeedsYou'
 
-export function Today({ onSchedule }: { onSchedule: () => void }) {
+export function Today({ onSchedule, onBackup }: { onSchedule: () => void; onBackup: () => void }) {
   const now = useNow()
   const user = useUserData()
 
@@ -38,6 +39,7 @@ export function Today({ onSchedule }: { onSchedule: () => void }) {
 
   const clubNames = new Map(user.clubs.map((c) => [c.code, c.name]))
   const { view } = model
+  const reminder = backupReminder(user.settings, model.today)
 
   const mark = async (s: Session, status: SessionStatus) => {
     await markSessions([s], status)
@@ -96,6 +98,11 @@ export function Today({ onSchedule }: { onSchedule: () => void }) {
         </section>
 
         <ComingUp today={model.today} items={model.comingUp} onTick={tick} />
+        {reminder && (
+          <button type="button" data-testid="backup-reminder" onClick={onBackup} className="-mt-3 text-left text-meta text-ink-2">
+            {reminder}
+          </button>
+        )}
       </div>
     </Page>
   )

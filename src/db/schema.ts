@@ -1,4 +1,5 @@
 import Dexie, { type EntityTable } from 'dexie'
+import { now } from '@/lib/clock'
 import type { ThemeSetting } from '@/lib/theme'
 
 // Build spec 4.2. Ids are crypto.randomUUID(); dates 'YYYY-MM-DD' (IST); times 'HH:mm'.
@@ -104,7 +105,7 @@ export const DEFAULT_SETTINGS: Omit<AppSettings, 'createdAt'> = {
 export async function getSettings(database: CampusDB = db): Promise<AppSettings> {
   const existing = await database.settings.get('app')
   if (existing) return existing
-  const fresh: AppSettings = { ...DEFAULT_SETTINGS, createdAt: new Date().toISOString() }
+  const fresh: AppSettings = { ...DEFAULT_SETTINGS, createdAt: now().toISOString() }
   await database.settings.put(fresh)
   return fresh
 }

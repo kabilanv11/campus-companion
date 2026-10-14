@@ -1,4 +1,5 @@
 import type { Draft } from '@/domain/parse'
+import { now } from '@/lib/clock'
 import { fromMinutes, toMinutes } from '@/domain/time'
 import type { Session } from '@/domain/sessions'
 import { db, type CampusDB, type SessionStatus, type StoredSession } from './schema'
@@ -9,7 +10,7 @@ export type Undo = () => Promise<void>
 export async function markSessions(sessions: Session[], status: SessionStatus): Promise<Undo> {
   const ids = sessions.map((s) => s.id)
   const before = await db.sessions.bulkGet(ids)
-  const markedAt = new Date().toISOString()
+  const markedAt = now().toISOString()
   const next: StoredSession[] = sessions.map((s, i) => ({
     ...(before[i] ?? { id: s.id, date: s.date, start: s.start, course: s.course, kind: s.kind }),
     status,
@@ -28,7 +29,7 @@ export async function markSessions(sessions: Session[], status: SessionStatus): 
 
 export async function setTaskDone(id: string, done: boolean): Promise<Undo> {
   const before = await db.tasks.get(id)
-  await db.tasks.update(id, { doneAt: done ? new Date().toISOString() : undefined })
+  await db.tasks.update(id, { doneAt: done ? now().toISOString() : undefined })
   return async () => {
     if (before) await db.tasks.put(before)
   }
@@ -77,7 +78,7 @@ export async function saveDraft(d: Draft, existingTaskId?: string): Promise<void
     due: d.due?.date,
     dueTime: d.due?.time,
     doneAt: existing?.doneAt,
-    createdAt: existing?.createdAt ?? new Date().toISOString(),
+    createdAt: existing?.createdAt ?? now().toISOString(),
   })
 }
 
