@@ -22,13 +22,15 @@ describe('bundled data files', () => {
 })
 
 describe('loader picks files by date', () => {
-  it('finds Term II and the October menu', () => {
+  it('finds Term II and the October and November menus', () => {
     expect(termFor('2026-10-14')?.id).toBe('II')
     expect(timetableFor('2026-10-14')?.term).toBe('II')
     expect(menuFor('2026-10-14')?.valid_from).toBe('2026-10-01')
+    expect(menuFor('2026-10-31')?.valid_from).toBe('2026-10-01')
+    expect(menuFor('2026-11-01')?.valid_from).toBe('2026-11-01')
   })
   it('returns nothing where no file covers the date yet', () => {
-    expect(menuFor('2026-11-03')).toBeUndefined()
+    expect(menuFor('2026-12-03')).toBeUndefined()
     expect(timetableFor('2027-01-05')).toBeUndefined() // Term III timetable not added yet
     expect(termFor('2027-01-05')?.id).toBe('III')
   })
