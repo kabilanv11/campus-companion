@@ -2,7 +2,7 @@
 // Extend these lists when a new menu brings new dishes.
 
 export const NON_VEG_KEYWORDS = ['chicken', 'mutton', 'egg', 'eggs', 'omelette', 'fish', 'keema', 'prawn']
-export const SWEET_KEYWORDS = ['halwa', 'kheer', 'gulab jamun', 'jalebi', 'ice cream', 'custard', 'rasgulla', 'sweet']
+export const SWEET_KEYWORDS = ['halwa', 'kheer', 'gulab jamun', 'jalebi', 'ladoo', 'ice cream', 'custard', 'rasgulla', 'sweet']
 
 export type FoodMark = 'veg' | 'nonveg' | 'sweet'
 

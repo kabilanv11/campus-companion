@@ -95,8 +95,16 @@ describe('meals', () => {
     expect(marks['Moong Dal Halwa']).toBe('sweet')
     expect(marks['Shahi Paneer']).toBe('veg')
   })
+  it('November menu is picked up and marked', () => {
+    const marks = Object.fromEntries(mealsForDate('2026-11-06', referenceData).flatMap((x) => x.items!).map((i) => [i.name, i.mark])) // Friday
+    expect(marks['Egg Bhurji']).toBe('nonveg')
+    expect(marks['Mutton Rogan Josh / Achari Chicken']).toBe('nonveg')
+    expect(marks['Jalebi']).toBe('sweet')
+    const thu = mealsForDate('2026-11-05', referenceData).find((x) => x.meal === 'dinner')!.items!
+    expect(thu.find((i) => i.name === 'Motichoor Ladoo')?.mark).toBe('sweet')
+  })
   it('no menu file: meal times stay, dishes are null', () => {
-    const m = mealsForDate('2026-11-16', referenceData)
+    const m = mealsForDate('2026-12-16', referenceData)
     expect(m.map((x) => x.start)).toEqual(['08:00', '13:00', '17:00', '20:00'])
     expect(m.every((x) => x.items === null)).toBe(true)
   })
