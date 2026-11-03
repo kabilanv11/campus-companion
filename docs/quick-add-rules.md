@@ -87,8 +87,10 @@ Matched as whole tokens, case-insensitive, plurals accepted, multi-word phrases 
 | Extra class | extra class, extra session, makeup, make-up, make up, compensatory, comp class, rescheduled class |
 | Guest lecture | guest lecture, guest session, guest talk, guest, gl |
 | Club event | a club name or alias (section 5); "meeting", "meet", "event" only when no course matched |
+| Cancelled | cancelled, canceled, cancel, cancellation, no class, called off |
 | Other | default when nothing above matches |
 
+- **Cancelled wins over every other keyword** ("mep guest lecture cancelled" cancels that lecture). It adds nothing: it marks an existing class cancelled, with Undo. The class is the named day's (at the typed time if one matches), else the course's next class that hasn't ended. The sheet shows Course and Class (a pick list of the next two weeks) and "Won't count toward <course>". Added 2026-10-14 at Kabilan's request.
 - **First keyword wins.** "read for quiz tue" → Reading; "quiz on ch 3" → Quiz. Later keywords stay in the title.
 - **Course + time + "class"/"session"/"lecture"** with no other keyword → Extra class ("MSM class sat 4pm").
 - **"case" with a deliverable word** (writeup, analysis, report, memo, deck) is an Assignment; "case" alone is Reading. This is a guess about MDI usage; one tap changes it.

@@ -101,3 +101,21 @@ describe('meals', () => {
     expect(m.every((x) => x.items === null)).toBe(true)
   })
 })
+
+describe('Coming up guest lectures', () => {
+  it('lists a guest lecture in the next week, not one already on the shown day', async () => {
+    const { buildToday } = await import('@/domain/today')
+    const guest = (id: string, date: string) => ({ id, date, start: '16:00', course: 'MEP', kind: 'guest' as const, venue: 'Auditorium' })
+    const m = buildToday({
+      now: at('2026-10-14', '09:00'),
+      name: 'Kabilan',
+      data: referenceData,
+      stored: [guest('g1', '2026-10-14'), guest('g2', '2026-10-16'), guest('g3', '2026-10-30')],
+      overrides: [],
+      tasks: [],
+      clubEvents: [],
+    })
+    const ids = m.comingUp.flatMap((i) => (i.type === 'guest' ? [i.session.id] : []))
+    expect(ids).toEqual(['g2'])
+  })
+})

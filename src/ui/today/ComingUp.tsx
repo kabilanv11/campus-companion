@@ -1,7 +1,8 @@
 import type { ComingUpItem } from '@/domain/today'
 import type { Task } from '@/db/schema'
 import { clockLabel, dayLabel, dayNum, dayShort } from '@/lib/format'
-import { Checkbox } from '@/ui/marks'
+import { shortTime } from '@/domain/time'
+import { Checkbox, CourseDot } from '@/ui/marks'
 import { SectionLabel } from '@/ui/Page'
 import { taskTitle } from './NeedsYou'
 
@@ -11,7 +12,7 @@ export function ComingUp({ today, items, onTick }: { today: string; items: Comin
     <section>
       <SectionLabel>Coming up</SectionLabel>
       {items.map((item, i) => (
-        <div key={item.type === 'task' ? item.task.id : `${item.label}-${item.date}`} className={`flex items-center gap-2.5 py-2.5 ${i > 0 ? 'border-t border-line' : ''}`}>
+        <div key={item.type === 'task' ? item.task.id : item.type === 'guest' ? item.session.id : `${item.label}-${item.date}`} className={`flex items-center gap-2.5 py-2.5 ${i > 0 ? 'border-t border-line' : ''}`}>
           {item.type === 'task' ? (
             <>
               <Checkbox onChange={() => onTick(item.task)} label={`Done: ${taskTitle(item.task)}`} />
@@ -19,6 +20,17 @@ export function ComingUp({ today, items, onTick }: { today: string; items: Comin
               <span className="text-meta text-ink-2 tnum">
                 {dayLabel(item.date, today)}
                 {item.task.dueTime && `, ${clockLabel(item.task.dueTime)}`}
+              </span>
+            </>
+          ) : item.type === 'guest' ? (
+            <>
+              <span className="flex w-4 shrink-0 justify-center self-start pt-[7px]"><CourseDot code={item.session.course} /></span>
+              <span data-testid="coming-guest" className="grid min-w-0 flex-1">
+                <b className="text-body font-semibold">{item.session.course} guest lecture</b>
+                <span className="text-meta text-ink-2">{item.session.room}</span>
+              </span>
+              <span className="self-start text-meta text-ink-2 tnum">
+                {dayLabel(item.date, today)}, {shortTime(item.session.start)}
               </span>
             </>
           ) : (
