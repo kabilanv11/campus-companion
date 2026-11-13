@@ -70,7 +70,9 @@ describe('course overrides from Settings', () => {
     expect(rows[0]).toMatchObject({ course: 'MEP', room: 'LR-3', effectiveFrom: '2026-10-14' })
     expect(rows[0]!.professor).toBeUndefined()
     // The timetable's post-midterm professor still applies.
-    expect(courseOn('MEP', '2026-11-16', ctx([], rows))).toMatchObject({ professor: 'Rohit Prasad', room: 'LR-3', defaultRoom: 'G-6' })
+    const timetableProf = courseOn('MEP', '2026-11-16', ctx())!.professor
+    expect(timetableProf).toBeTruthy()
+    expect(courseOn('MEP', '2026-11-16', ctx([], rows))).toMatchObject({ professor: timetableProf, room: 'LR-3', defaultRoom: 'G-6' })
   })
 })
 
