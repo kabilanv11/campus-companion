@@ -62,7 +62,7 @@ Repo layout:
 
 ### 4.1 Bundled reference data (read-only, ships with the app)
 
-- **Timetable** (`data/timetables/term-II.json`, from today's `timetable.json`): 5 slots of 90 minutes, 7 courses with credits, length (`full` = 20 sessions, `half` = 10 sessions, pre-midterm only), faculty with `applies` (`all`, `pre_midterm`, `post_midterm`), 14 weekly entries `{day, slot, course}`, and a default room of G-6 in Gurukula. Monday, Wednesday and Friday slot I is Office Hours and is not a class. There are no Saturday classes.
+- **Timetable** (`data/timetables/term-II.json`, from today's `timetable.json`): 5 slots of 90 minutes, 7 courses with credits, length (`full` = 20 sessions, `half` = 10 sessions, pre-midterm only), faculty with `applies` (`all`, `pre_midterm`, `post_midterm`), weekly entries `{day, slot, course, applies?}` (`applies` as for faculty, for slots that move at the mid-term), and a default room of G-6 in Gurukula. Monday, Wednesday and Friday slot I is Office Hours and is not a class. There are no Saturday classes.
 - **Menu** (`data/menus/2026-10.json`, from today's `mess_menu.json`): weekly repeat, valid 2026-10-01 to 2026-10-31. Holds meal times (breakfast 08:00–10:00, lunch 13:00–14:30, snacks 17:00–18:00, dinner 20:00–21:30), `always_included` items per meal, and `days.{mon..sun}.{meal}` item lists.
 - **calendar.json:** Terms II and III with start, end, last class day, mid-term and end-term exam ranges, `classes_resume`, `no_class_days[]` (from, to, label), `events[]`, and breaks.
 

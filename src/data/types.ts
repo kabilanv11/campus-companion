@@ -27,7 +27,8 @@ export interface Timetable {
   session_length_minutes: number
   slots: Slot[]
   courses: Course[]
-  weekly: { day: Weekday; slot: string; course: string }[]
+  /** `applies` limits an entry to one half of the term, for slots that move at the mid-term. Omitted means all term. */
+  weekly: { day: Weekday; slot: string; course: string; applies?: FacultyApplies }[]
 }
 
 export type MealName = 'breakfast' | 'lunch' | 'snacks' | 'dinner'
