@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "source": "MDI Gurgaon PGDM 2026-28 Term II timetable PDF (uploads/hearth/35c43825-d041-4639-a1ab-0f379af39936)",
+  "source": "MDI Gurgaon PGDM 2026-28 Term II timetable PDF (uploads/hearth/35c43825-d041-4639-a1ab-0f379af39936); post-midterm slots and faculty from 'Time Table - POST MT' PDF (2026-11-13)",
   "term": "II",
   "section": "D",
   "location": {
@@ -45,12 +45,7 @@
         {
           "abbr": "RK",
           "name": "Rahul Kumar",
-          "applies": "pre_midterm"
-        },
-        {
-          "abbr": "RP",
-          "name": "Rohit Prasad",
-          "applies": "post_midterm"
+          "applies": "all"
         }
       ]
     },
@@ -204,12 +199,19 @@
     {
       "day": "fri",
       "slot": "III",
-      "course": "MAC"
+      "course": "MAC",
+      "applies": "pre_midterm"
     },
     {
       "day": "fri",
       "slot": "IV",
       "course": "MSM"
+    },
+    {
+      "day": "fri",
+      "slot": "V",
+      "course": "MAC",
+      "applies": "post_midterm"
     }
   ],
   "notes": [
@@ -218,7 +220,8 @@
     "ODC faculty is 'AKJ' in the grid but '(AJ)' in the course list; same person (Ajay K. Jain).",
     "No Section D classes on Saturday.",
     "Recurring slots alone give MAC 19 sessions and WEC 9 pre-midterm; the fixed totals above assume makeup or extra classes fill the gap.",
-    "Every class, extra class and guest lecture lasts 1.5 hours (confirmed by Kabilan on 2026-10-12)."
+    "Every class, extra class and guest lecture lasts 1.5 hours (confirmed by Kabilan on 2026-10-12).",
+    "Post-MT timetable (classes resume 2026-11-12): Section D is unchanged except Friday MAC moves from slot III to slot V, and MEP stays with Rahul Kumar (the original PDF had planned Rohit Prasad after the mid-term). WEC is gone, as expected for a Pre-MT course."
   ],
   "session_length_minutes": 90
 }
