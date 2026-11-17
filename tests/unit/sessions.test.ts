@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { sessionsForDate } from '@/domain/sessions'
+import { referenceData } from '@/data'
 import { ctx } from './helpers'
 
 const codes = (date: string, c = ctx()) => sessionsForDate(date, c).map((s) => s.course)
@@ -26,7 +27,22 @@ describe('sessions for a date (6.1)', () => {
     expect(codes('2026-10-15')).toContain('WEC') // Thursday before the mid-term
     expect(codes('2026-11-12')).not.toContain('WEC') // first Thursday after classes resume
     const mep = sessionsForDate('2026-11-16', ctx()).find((s) => s.course === 'MEP')
-    expect(mep?.professor).toBe('Rohit Prasad')
+    const faculty = referenceData.timetables.find((t) => t.term === 'II')!.courses.find((c) => c.code === 'MEP')!.faculty
+    const post = faculty.find((f) => f.applies === 'post_midterm') ?? faculty.find((f) => f.applies === 'all')
+    expect(mep?.professor).toBe(post?.name)
+  })
+
+  it('a weekly entry with applies runs only in its half of the term', () => {
+    const base = ctx()
+    const tt = base.data.timetables.find((t) => t.term === 'II')!
+    const weekly = [
+      ...tt.weekly.filter((w) => w.day !== 'fri'),
+      { day: 'fri' as const, slot: 'III', course: 'MAC', applies: 'pre_midterm' as const },
+      { day: 'fri' as const, slot: 'V', course: 'MAC', applies: 'post_midterm' as const },
+    ]
+    const c = { ...base, data: { ...base.data, timetables: base.data.timetables.map((t) => (t === tt ? { ...tt, weekly } : t)) } }
+    expect(sessionsForDate('2026-10-16', c).map((s) => s.id)).toEqual(['2026-10-16_III_MAC'])
+    expect(sessionsForDate('2026-11-13', c).map((s) => s.id)).toEqual(['2026-11-13_V_MAC'])
   })
 
   it('adds stored guest lectures and makeups, even on a Saturday', () => {

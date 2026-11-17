@@ -1,5 +1,5 @@
 import type { ReferenceData } from '@/data'
-import type { Course, Timetable } from '@/data/types'
+import type { Course, FacultyApplies, Timetable } from '@/data/types'
 import type { CourseOverride, SessionKind, SessionStatus, StoredSession } from '@/db/schema'
 import { isPostMidterm, noClassReason, termOf } from './calendar'
 import { fromMinutes, toMinutes, weekday } from './time'
@@ -65,6 +65,11 @@ function courseRunsOn(course: Course, postMidterm: boolean): boolean {
   return (course.runs ?? 'pre_midterm') === 'pre_midterm' ? !postMidterm : postMidterm
 }
 
+function entryRunsOn(applies: FacultyApplies | undefined, postMidterm: boolean): boolean {
+  if (!applies || applies === 'all') return true
+  return applies === 'post_midterm' ? postMidterm : !postMidterm
+}
+
 /** Build spec 6.1: every session on a date, regular and added, sorted by start time. */
 export function sessionsForDate(date: string, ctx: SessionContext): Session[] {
   const { data, stored, overrides } = ctx
@@ -106,7 +111,7 @@ export function sessionsForDate(date: string, ctx: SessionContext): Session[] {
   if (timetable && noClassReason(date, data.calendar) === null) {
     const day = weekday(date)
     for (const entry of timetable.weekly) {
-      if (entry.day !== day) continue
+      if (entry.day !== day || !entryRunsOn(entry.applies, postMidterm)) continue
       const course = timetable.courses.find((c) => c.code === entry.course)
       const slot = timetable.slots.find((s) => s.id === entry.slot)
       if (!course || !slot || !courseRunsOn(course, postMidterm)) continue

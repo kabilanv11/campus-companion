@@ -49,7 +49,7 @@ export function validateTimetable(t: unknown): string[] {
   const codes = new Set(courses.map((c) => (isObj(c) ? c.code : null)))
   const slotIds = new Set(slots.map((s) => (isObj(s) ? s.id : null)))
   for (const w of Array.isArray(t.weekly) ? t.weekly : []) {
-    check(e, isObj(w) && DAYS.includes(String(w.day)) && slotIds.has(w.slot) && codes.has(w.course), `bad weekly entry ${JSON.stringify(w)}`)
+    check(e, isObj(w) && DAYS.includes(String(w.day)) && slotIds.has(w.slot) && codes.has(w.course) && (w.applies === undefined || ['all', 'pre_midterm', 'post_midterm'].includes(String(w.applies))), `bad weekly entry ${JSON.stringify(w)}`)
   }
   check(e, Array.isArray(t.weekly) && t.weekly.length > 0, 'weekly missing')
   return e
